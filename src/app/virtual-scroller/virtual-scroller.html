@@ -1,0 +1,67 @@
+<!-- Sticky header — lives outside the scrollable viewport so it never scrolls away. -->
+<div class="vs-header">
+  <div class="vs-header-left">
+    <span class="vs-title">{{ title() }}</span>
+    @if (badgeText()) {
+      <span class="vs-badge">{{ badgeText() }}</span>
+    }
+  </div>
+  <span class="vs-count">{{ showingText() }}</span>
+  <!-- Optional controls projected by the consumer (e.g. a search input). -->
+  <ng-content select="[vsHeaderExtra]" />
+</div>
+
+<!--
+  Focusable viewport — keyboard events (↑ ↓ Enter) are captured here.
+  tabindex="0" makes it keyboard-reachable.
+-->
+<div
+  #viewport
+  class="vs-viewport"
+  tabindex="0"
+  role="listbox"
+  [attr.aria-label]="title()"
+  [attr.aria-activedescendant]="focusedIndex() >= 0 ? 'vs-item-' + focusedIndex() : null"
+  (scroll)="onScroll()"
+  (keydown)="onKeydown($event)"
+>
+  <!--
+    .vs-runway is sized to the full virtual height so the scrollbar is accurate,
+    but only the slice of items in [startIndex, endIndex] is in the DOM.
+  -->
+  <div class="vs-runway" [style.height.px]="totalHeight()">
+    <!--
+      translateY positions the rendered block at the correct scroll offset.
+      Using transform (not top/margin) keeps this off the main thread layout.
+    -->
+    <div
+      class="vs-items"
+      [style.transform]="'translateY(' + offsetY() + 'px)'"
+    >
+      <!--
+        track uses the consumer-supplied trackByFn (falling back to item reference).
+        This allows Angular to reuse existing DOM nodes when the same item stays
+        visible across a scroll — recycling without a manual pool.
+      -->
+      @for (item of visibleItems(); track trackItem(startIndex() + $index, item)) {
+        <div
+          class="vs-item-wrapper"
+          role="option"
+          [id]="'vs-item-' + (startIndex() + $index)"
+          [class.vs-focused]="focusedIndex() === startIndex() + $index"
+          [attr.data-vs-index]="startIndex() + $index"
+          [attr.aria-selected]="focusedIndex() === startIndex() + $index"
+        >
+          <ng-container
+            [ngTemplateOutlet]="itemTemplate"
+            [ngTemplateOutletContext]="{
+              $implicit: item,
+              index: startIndex() + $index,
+              focused: focusedIndex() === startIndex() + $index
+            }"
+          />
+        </div>
+      }
+    </div>
+  </div>
+</div>

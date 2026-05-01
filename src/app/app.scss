@@ -1,0 +1,17 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  height: calc(100vh - 64px);
+  box-sizing: border-box;
+}
+
+// Each column is a flex container so the component host can grow to fill it.
+// overflow: hidden is intentional — each component's VirtualScroller owns scrolling.
+.column {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}

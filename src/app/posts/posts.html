@@ -1,0 +1,44 @@
+<app-virtual-scroller
+  [items]="posts()"
+  [estimatedItemHeight]="188"
+  [trackByFn]="trackPost"
+  title="Posts"
+  [totalCount]="totalCount()"
+  (itemActivated)="onItemActivated($event)"
+>
+  <!-- Projected into the sticky header via the [vsHeaderExtra] slot — on its own row -->
+  <div class="post-controls" vsHeaderExtra>
+    <mat-form-field appearance="outline" class="post-sort">
+      <mat-label>Sort</mat-label>
+      <mat-select [value]="sortValue()" (selectionChange)="onSortChange($event.value)">
+        <mat-option value="recent">Recent first</mat-option>
+        <mat-option value="title">By title (A–Z)</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="post-search">
+      <input
+        matInput
+        #searchInput
+        [value]="searchValue()"
+        (input)="onSearchInput(searchInput.value)"
+        placeholder="Filter posts…"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <ng-template let-post let-focused="focused">
+    <div class="post-slot" [class.focused]="focused">
+      <mat-card class="post-card" (click)="openPost(post)">
+        <mat-card-header>
+          <mat-card-title>{{ post.title }}</mat-card-title>
+          <mat-card-subtitle>by {{ post.author }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ post.body }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-template>
+</app-virtual-scroller>

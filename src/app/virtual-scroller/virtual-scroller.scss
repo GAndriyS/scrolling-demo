@@ -1,0 +1,89 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  // Without this a flex child won't shrink below content height,
+  // which breaks the fixed-height constraint the scroller relies on.
+  min-height: 0;
+}
+
+// ── Sticky header ──────────────────────────────────────────────────────────
+
+.vs-header {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.12);
+}
+
+.vs-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vs-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.vs-badge {
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  border-radius: 12px;
+  padding: 2px 8px;
+}
+
+.vs-count {
+  font-size: 0.78rem;
+  color: var(--mat-sys-outline);
+  white-space: nowrap;
+}
+
+// ── Scrollable viewport ────────────────────────────────────────────────────
+
+.vs-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  outline: none; // focus ring handled by items themselves
+  will-change: scroll-position;
+  min-height: 0;
+}
+
+// ── Virtual runway & item block ────────────────────────────────────────────
+
+.vs-runway {
+  position: relative;
+  width: 100%;
+}
+
+.vs-items {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+// ── Focus ring on the focused item wrapper ─────────────────────────────────
+
+.vs-item-wrapper {
+  &.vs-focused {
+    // Subtle inset focus ring on the wrapper; the child template applies
+    // its own background highlight (see users.scss / posts.scss).
+    outline: 2px solid var(--mat-sys-primary);
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+}

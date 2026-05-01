@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ data.post.title }}</h2>
+
+<mat-dialog-content>
+  <p class="post-meta">by {{ data.post.author }}</p>
+  <p class="post-body">{{ data.post.body }}</p>
+
+  <mat-divider />
+
+  <h3 class="comments-heading">
+    <mat-icon>comment</mat-icon>
+    Comments ({{ data.comments.length }})
+  </h3>
+
+  <div class="comments-list">
+    @for (comment of data.comments; track comment.id) {
+      <div class="comment">
+        <div class="comment-header">
+          <mat-icon class="comment-icon">account_circle</mat-icon>
+          <span class="comment-author">{{ comment.author }}</span>
+        </div>
+        <p class="comment-body">{{ comment.body }}</p>
+      </div>
+      @if (!$last) {
+        <mat-divider />
+      }
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

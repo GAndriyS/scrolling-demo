@@ -1,0 +1,80 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+// Each user row is exactly 72 px — the estimated height passed to the scroller.
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 72px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 6px;
+  transition:
+    background-color 0.12s ease,
+    box-shadow 0.12s ease;
+
+  &:hover {
+    background-color: var(--mat-sys-surface-variant);
+  }
+
+  &.focused {
+    background-color: var(--mat-sys-secondary-container);
+  }
+
+  &.selected {
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+
+    .avatar-icon,
+    .check-icon {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  // Focused + selected
+  &.focused.selected {
+    background-color: color-mix(
+      in srgb,
+      var(--mat-sys-primary-container) 80%,
+      var(--mat-sys-secondary-container) 20%
+    );
+  }
+}
+
+.avatar-icon {
+  flex-shrink: 0;
+  color: var(--mat-sys-outline);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: var(--mat-sys-outline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.check-icon {
+  flex-shrink: 0;
+  color: var(--mat-sys-primary);
+}

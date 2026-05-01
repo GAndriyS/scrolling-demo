@@ -1,0 +1,29 @@
+<app-virtual-scroller
+  [items]="users()"
+  [estimatedItemHeight]="72"
+  [trackByFn]="trackUser"
+  title="Users"
+  [totalCount]="totalCount()"
+  [badgeText]="badgeText"
+  (itemActivated)="onItemActivated($event)"
+>
+  <ng-template let-user let-focused="focused">
+    <div
+      class="user-item"
+      [class.selected]="isSelected(user.id)"
+      [class.focused]="focused"
+      (click)="toggle(user.id)"
+    >
+      <mat-icon class="avatar-icon">
+        {{ isSelected(user.id) ? 'person' : 'person_outline' }}
+      </mat-icon>
+      <div class="user-info">
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-email">{{ user.email }}</span>
+      </div>
+      @if (isSelected(user.id)) {
+        <mat-icon class="check-icon">check_circle</mat-icon>
+      }
+    </div>
+  </ng-template>
+</app-virtual-scroller>
